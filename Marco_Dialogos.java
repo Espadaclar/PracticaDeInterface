@@ -4,8 +4,19 @@ import java.awt.event.*;
 import javax.swing.event.*;
 
 /**
- *
- * @author Usuario
+ * crea laminas diferentes variando el nº de botones para cada una de ellas.
+ * el nº de botones lo determina la longitud del Array que pasamos en el constructor.
+ * Despues de haber creado la presentación de la interface, ponemos a los botones a la escucha.
+ * 
+ *1º tratamos de que el boton ‘Aceptar’ averigue cual es el boton seleccionado.  ¡¡¡ VER MT--> 'dameSeleccion()'
+ *   ---------El mt getActionCommand() devuelve El String del boton correspondiente a una acción de comado, luego 
+ *2º .Tenemos que hacer que nuestross botones desencadenen acciones de comando, como el propio mt , 
+ *    getActionCommand(), indica aplicando a cada boton el mt ,setActionCommand( …..),
+ *   Para ello nos vamos al lugar donde construiamos los botones, dentro del bucle for.
+ *3º .Tenemos que hacer que al pulsar el boton de ‘Aceptar’ se ejecute el mt. Luego
+ *     Nos vamos a donde creamos el boton y le aplicamos la interface ‘addActionListener( …… )’
+
+ * @author FRANCISCO_JAVIER
  */
 public class Marco_Dialogos extends JFrame {
 
@@ -48,7 +59,7 @@ public class Marco_Dialogos extends JFrame {
         lamina_cuadrada.add(laminaEntrada);
         
         boton = new JButton("Aceptar");
-
+        boton.addActionListener(new AccionMostrar());//parametro -> clase donde esta codificada la accion que realiza.
         
         add(lamina_cuadrada, BorderLayout.CENTER);
         add(boton, BorderLayout.SOUTH);
@@ -62,5 +73,20 @@ public class Marco_Dialogos extends JFrame {
         Image image = icon.getImage("../icono2.gif");
         setIconImage(image);
 
+    }
+    
+    // --- CLASE PARA PONER A LA ESCUCHA
+    private class AccionMostrar implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {  
+            //- para que nos muestre el boton seleccionado invocamos al mt de la cl 'Lamina_Botones'
+            //- sobre cada una de las laminas creadas, sobre sus atributos que hemos creado en esta clase.
+            //private Lamina_Botones lamina_tipo, lamina_tipoMensaje, laminaMensaje, lamina_confirmar, laminaOpcion, laminaEntrada;
+            System.out.println(lamina_tipoMensaje.dameSeleccion());
+            System.out.println(lamina_tipo.dameSeleccion());
+            System.out.println("---------------");
+        }
+    
     }
 }

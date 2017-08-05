@@ -5,7 +5,17 @@ import javax.swing.event.*;
 /**
  * crea laminas diferentes variando el nº de botones para cada una de ellas.
  * el nº de botones lo determina la longitud del Array que pasamos en el constructor.
- * @author Usuario
+ * Despues de haber creado la presentación de la interface, ponemos a los botones a la escucha.
+ * 
+ *1º tratamos de que el boton ‘Aceptar’ averigue cual es el boton seleccionado.  ¡¡¡ VER MT--> 'dameSeleccion()'
+ *   ---------El mt getActionCommand() devuelve El String del boton correspondiente a una acción de comado, luego 
+ *2º .Tenemos que hacer que nuestross botones desencadenen acciones de comando, como el propio mt , 
+ *    getActionCommand(), indica aplicando a cada boton el mt ,setActionCommand( …..),
+ *   Para ello nos vamos al lugar donde construiamos los botones, dentro del bucle for.
+ *3º .Tenemos que hacer que al pulsar el boton de ‘Aceptar’ se ejecute el mt. Luego
+ *     Nos vamos a donde creamos el boton y le aplicamos la interface ‘addActionListener( …… )’
+
+ * @author FRANCISCO_JAVIER
  */
 class Lamina_Botones extends JPanel{
     private ButtonGroup grupo;
@@ -26,6 +36,8 @@ class Lamina_Botones extends JPanel{
 
         for(int i = 0; i < opciones.length; i ++){
             bot = new JRadioButton(opciones[i]);
+            // -- DOTAMOSS AL BOTON con 'setActionCommand("  ")' PARA QUE REALICE UNA ACCION.
+            bot.setActionCommand(opciones[i]);//- en el parametro hacemos que coincida con el nombre del  boton
             add(bot);
             grupo.add(bot);
 
@@ -34,6 +46,16 @@ class Lamina_Botones extends JPanel{
         }
     }
 
-    /////////////////////////////    ********** VISTO VIDEO 124
+    /**
+     * @return el nombre del boton que esta seleccionado
+     */
+    public String dameSeleccion(){
+        //-- SELECCIONA EL BOTON SELECCIONADO DE TODOS LOS QUE TENEMOS.
+       ButtonModel miboton = grupo.getSelection();
+        String s = miboton.getActionCommand();// --Toma el nombre del botón y lo almacena.
+        return s;
+        // ---- ¡¡¡LO MISMO PERO EN UNA LINEA.
+        //return grupo.getSelection().getActionCommand();
+    }
 
 }
