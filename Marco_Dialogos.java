@@ -78,8 +78,8 @@ public class Marco_Dialogos extends JFrame {
     }
 
     // --- CLASE PARA PONER A LA ESCUCHA
-    private class AccionMostrar implements ActionListener {
-           
+        private class AccionMostrar implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             //- para que nos muestre el boton seleccionado invocamos al mt 'dameSeleccion()' de la cl 'Lamina_Botones'
@@ -98,35 +98,29 @@ public class Marco_Dialogos extends JFrame {
             //----****** el parámetro 1º es para indicarle quien es el ,componente que va ha desencadenar la acción. 
             //----****** el parámetro 2º, es para add un mensaje o componente que se fija en la ventana.
             //---- ***   el 3º es para poner titulo, componente, boton etc a la ventana emergente. 
-            //----****** el 4º para cambiar un icono que muestara la ventana al lado del mensaje
-            // ---*****  el 5º opociones que el usuario puede seleccionar.
-            // ---*****  el 6º a opción que se selecciona inicialmente; Si es nulo, entonces nada será seleccionado 
-            //                 inicialmente; Solo es significativo si se usan opcione
+            //----****** el 4º A PARTIR DE ESTE PARAMETRO LOS PARAMETROS SON DIFERENTES PARA CADA VENTANA.
             //JOptionPane(Object message, int messageType, int optionType, Icon icon, Object[] options, Object initialValue)
             if (tipoDeVentana.equals("Mensaje")) {
-                JOptionPane.showMessageDialog(lamina_tipo, getObject(), "Advertencia", 2, getIcon());
+                JOptionPane.showMessageDialog(lamina_tipo, getObject(), "Mensaje", getIconLamina());
             } else if (tipoDeVentana.equals("Confirmar")) {
-                JOptionPane.showConfirmDialog(lamina_tipo, getObject(), "Confirmar", 2, 0);
+                JOptionPane.showConfirmDialog(lamina_tipo, getObject(), "Confirmar", getConfirmarLamina(), getIconLamina());
             } else if (tipoDeVentana.equals("Opcion")) {
-                JOptionPane.showOptionDialog(lamina_tipo, getObject(), "Opciones", 1, 1, null, null, null);
+                JOptionPane.showOptionDialog(lamina_tipo, getObject(), "Opciones", getConfirmarLamina(), getIconLamina(), null, getOptionLamina(), getEntrada());
             } else if (tipoDeVentana.equals("Entrada")) {
-                JOptionPane.showInputDialog(lamina_tipo, getObject());
+                if (laminaEntrada.dameSeleccion().equals("Campo de texto")) {
+                    JOptionPane.showInputDialog(lamina_tipo, getObject(), "Entradas");
+                } else {
+                    JOptionPane.showInputDialog(lamina_tipo, getObject(), "Combo", getIconLamina(), null, new String[]{"Amarillo", "Roj", "Azul"}, "Azul");
+                }
             }
-
-            System.out.println("tipoDeVentana " + tipoDeVentana);
-            System.out.println("tipoDeMensaje " + tipoDeMensaje);
-            System.out.println("mensajeDeUsuario " + mensajeEnVentana);
-            System.out.println("---------------");
-            System.out.println("tipoDeConfirmacion " + tipoDeConfirmacion);
-            System.out.println("tipoOpcion " + tipoOpcion);
-            System.out.println("tipoDeEntrada " + tipoDeEntrada);
-            System.out.println("------ FIN ---------");
         }
     }
 
+    ////// ****** SERIE DE METODOS PARA CODIFICAR LOS DISTINTOS TIPOS DE VENTANAS EMERGENTES  ************************
     /**
-     * devuelve un icono aleatoriamente, servira como parametro en la cl 'JOptionPane' 
-     * utilizada en la  class interna;  'AccionMostrar implements ActionListener'.
+     * devuelve un icono aleatoriamente, servira como parametro en la cl
+     * 'JOptionPane' utilizada en la class interna; 'AccionMostrar implements
+     * ActionListener'.
      */
     public Icon getIcon() {
         Random ale = new Random();
@@ -139,39 +133,132 @@ public class Marco_Dialogos extends JFrame {
     }
 
     /**
-     * devuelve un objeto, servira como parametro en la cl 'JOptionPane' 
-     * utilizada en la  class interna;  'AccionMostrar implements ActionListener'.
+     * CODIGO PARA LA ELECCION DE UN ICONO EN LA VENTANA EMERGENTE. asigna un
+     * icono a la lamina, dependiendo de la opcion "ERROR_MESSAGE",
+     * "WARNING_MESSAGE", etc
+     */
+    public int getIconLamina() {
+        int valor = 0;
+        if (lamina_tipoMensaje.dameSeleccion().equals("ERROR_MESSAGE")) {
+            valor = 0;
+        } else if (lamina_tipoMensaje.dameSeleccion().equals("INFORMATION_MESSAGE")) {
+            valor = 1;
+        } else if (lamina_tipoMensaje.dameSeleccion().equals("WARNING_MESSAGE")) {
+            valor = 2;
+        } else if (lamina_tipoMensaje.dameSeleccion().equals("QUESTION_MESSAGE")) {
+            valor = 3;
+        } else if (lamina_tipoMensaje.dameSeleccion().equals("PLAIN_MESSAGE")) {
+            valor = -1;
+        }
+        return valor;
+
+    }
+
+    /**
+     * CODIGO PARA LA ELECCION DE VENTANA EMERGENTE DE TIPO 'CONFIRMAR'
+     *
+     * @return
+     */
+    public int getConfirmarLamina() {
+        int valor = 0;
+        if (lamina_confirmar.dameSeleccion().equals("DEFAULT_OPTION")) {
+            valor = -1;
+        } else if (lamina_confirmar.dameSeleccion().equals("YES_NO_OPTION")) {
+            valor = 0;
+        } else if (lamina_confirmar.dameSeleccion().equals("YES_NO_CANCEL_OPTION")) {
+            valor = 1;
+        } else if (lamina_confirmar.dameSeleccion().equals("OK_CANCEL_OPTION")) {
+            valor = 2;
+        }
+        return valor;
+    }
+
+    /**
+     * CODIGO PARA LA ELECCION DE VENTANA EMERGENTE DE TIPO 'CONFIRMAR'
+     *
+     * @return
+     */
+    public Object getEntrada() {
+        Object valor = new Object();
+        if (laminaEntrada.dameSeleccion().equals("Campo de texto")) {
+            JTextField text = new JTextField(15);
+            valor = text;
+        } else if (laminaEntrada.dameSeleccion().equals("Combo")) {
+            /* JComboBox combo = new JComboBox();
+             combo.addItem("Azul ");
+             combo.addItem("Amarillo");
+             combo.addItem("Rojo");*/
+            valor = new String[]{"Amarillo", "Roj", "Azul"};
+        }
+
+        return valor;
+    }
+
+    /**
+     * CODIGO PARA LA ELECCION DE VENTANA EMERGENTE DE TIPO 'OPCION'
+     *
+     * @return
+     */
+    public Object[] getOptionLamina() {
+        Object[] valor = new Object[3];
+        Icon iconoImage = new ImageIcon("../iconos/image.gif");
+        Icon iconoImage2 = new ImageIcon("../iconos/page_deny.gif");
+        Icon iconoImage3 = new ImageIcon("../iconos/interface_installer.gif");
+        Date fecha = new Date();
+        if (laminaOpcion.dameSeleccion().equals("String")) {
+            valor[0] = "Amarillo";
+            valor[1] = "Azul";
+            valor[2] = "Rojo";
+            /*valor[0] = new JButton("Boton 1");
+             valor[1] = new JButton("Boton 2");
+             valor[2] = new JButton("Boton 3");*/
+        } else if (laminaOpcion.dameSeleccion().equals("Icono[]")) {
+            valor[0] = iconoImage;
+            valor[1] = iconoImage2;
+            valor[2] = iconoImage3;
+            /*valor[0] = new JButton(iconoImage);
+             valor[1] = new JButton(iconoImage2);
+             valor[2] = new JButton(iconoImage3);*/
+        } else if (laminaOpcion.dameSeleccion().equals("Object[]")) {
+            valor[0] = new JButton(iconoImage);
+            valor[1] = fecha;
+            valor[2] = new JButton("Boton X");
+        }
+        return valor;
+
+    }
+
+    /**
+     * CODIGO PARA LA ELECCION DE VENTANA EMERGENTE DE TIPO 'OPCION' devuelve un
+     * objeto, servira como parametro en la cl 'JOptionPane' utilizada en la
+     * class interna; 'AccionMostrar implements ActionListener'.
      */
     public Object getObject() {
-        
+
         Object objeto2 = new Object();
-        
+
         String cadena = "Mensaje";
         Icon icono = getIcon();
         JButton boton = new JButton(getIcon());
         boton.setBackground(Color.yellow);
         Date date = new Date();
         Object[] objeto = new Object[4];
-        
+
         objeto[0] = cadena;
         objeto[1] = icono;
         objeto[2] = boton;
         objeto[3] = date;
-        
-        if(laminaMensaje.dameSeleccion().equals("Cadena")){
+
+        if (laminaMensaje.dameSeleccion().equals("Cadena")) {
             objeto2 = objeto[0];
-        }else if(laminaMensaje.dameSeleccion().equals("Icono")){
+        } else if (laminaMensaje.dameSeleccion().equals("Icono")) {
             objeto2 = objeto[1];
-        }else if(laminaMensaje.dameSeleccion().equals("Componente")){
+        } else if (laminaMensaje.dameSeleccion().equals("Componente")) {
             objeto2 = objeto[2];
-        }
-        else if(laminaMensaje.dameSeleccion().equals("Otros")){
+        } else if (laminaMensaje.dameSeleccion().equals("Otros")) {
             objeto2 = objeto[3];
-        }
-        else if(laminaMensaje.dameSeleccion().equals("Object[]")){
-            for(int i = 0; i < 4; i ++){
-                objeto2 = objeto;
-            }
+        } else if (laminaMensaje.dameSeleccion().equals("Object[]")) {
+            objeto2 = objeto;
         }
         return objeto2;
     }
